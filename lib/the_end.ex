@@ -5,7 +5,7 @@ defmodule TheEnd do
 
   Original idea is
 
-  https://gist.github.com/aaronjensen/33cc2aeb74746cac3bcb40dcefdd9c09
+  [https://gist.github.com/aaronjensen/33cc2aeb74746cac3bcb40dcefdd9c09](https://gist.github.com/aaronjensen/33cc2aeb74746cac3bcb40dcefdd9c09)
 
   Many of the logic in this library is borrowed from here.
   I added a little bit componentization
@@ -23,20 +23,20 @@ defmodule TheEnd do
 
   ### Phoenix Endpoint
 
-    children = [
+      children = [
 
-      supervisor(MyApp.Endpoint, []),
+        supervisor(MyApp.Endpoint, []),
 
-      # ... other supervisors/workers
+        # ... other supervisors/workers
 
-      # you should set this supervisor at last
-      supervisor(
-        TheEnd.Supervisor.Phoenix,
-        [[timeout: 10_000, endpoint: MyApp.Endpoint]],
-        [shutdown: 15_000]
-      )
-    ]
-    Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
+        # you should set this supervisor at last
+        supervisor(
+          TheEnd.Supervisor.Phoenix,
+          [[timeout: 10_000, endpoint: MyApp.Endpoint]],
+          [shutdown: 15_000]
+        )
+      ]
+      Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
   If your Phoenix version is 1.2 or older, use TheEnd.Supervisor.LegacyPhoenix instead of TheEnd.Supervisor.Phoenix.
 
@@ -44,54 +44,54 @@ defmodule TheEnd do
 
   Your need a Plug wrapper supervisor
 
-    defmodule MyApp.HTTPSupervisor do
+      defmodule MyApp.HTTPSupervisor do
 
-      use Supervisor
+        use Supervisor
 
-      def start_link() do
-        Supervisor.start_link(__MODULE__, nil, name: __MODULE__)
+        def start_link() do
+          Supervisor.start_link(__MODULE__, nil, name: __MODULE__)
+        end
+
+        def init(_args) do
+          [Plug.Adapters.Cowboy.child_spec(:http,
+            MyApp.Router, [], [port: 3000])]
+          |> supervise(strategy: :one_for_one)
+        end
+
       end
-
-      def init(_args) do
-        [Plug.Adapters.Cowboy.child_spec(:http,
-          MyApp.Router, [], [port: 3000])]
-        |> supervise(strategy: :one_for_one)
-      end
-
-    end
 
   And at your application supervisor setting
 
-    children = [
+      children = [
 
-      supervisor(MyApp.HTTPSupervisor, []),
+        supervisor(MyApp.HTTPSupervisor, []),
 
-      # ... other supervisors/workers
+        # ... other supervisors/workers
 
-      # you should set this supervisor at last
-      supervisor(
-        TheEnd.Supervisor.Plug,
-        [[timeout: 10_000, endpoint: MyApp.Endpoint]],
-        [shutdown: 15_000]
-      )
-    ]
-    Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
+        # you should set this supervisor at last
+        supervisor(
+          TheEnd.Supervisor.Plug,
+          [[timeout: 10_000, endpoint: MyApp.Endpoint]],
+          [shutdown: 15_000]
+        )
+      ]
+      Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
   Or else if you don't need to wait for requests to finish.
 
-    children = [
+      children = [
 
-      supervisor(MyApp.HTTPSupervisor, []),
+        supervisor(MyApp.HTTPSupervisor, []),
 
-      # ... other supervisors/workers
+        # ... other supervisors/workers
 
-      # you should set this worker at last
-      worker(
-        TheEnd.AcceptanceStopper,
-        [[gatherer: TheEnd.ListenerGatherer.Plug, endpoint: MyApp.HTTPSupervisor]]
-      )
-    ]
-    Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
+        # you should set this worker at last
+        worker(
+          TheEnd.AcceptanceStopper,
+          [[gatherer: TheEnd.ListenerGatherer.Plug, endpoint: MyApp.HTTPSupervisor]]
+        )
+      ]
+      Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
   You can choose **gatherer** option for your situation
 
