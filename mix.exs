@@ -3,7 +3,7 @@ defmodule TheEnd.Mixfile do
 
   def project do
     [app: :the_end,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.4",
      package: package(),
      build_embedded: Mix.env == :prod,
@@ -16,7 +16,9 @@ defmodule TheEnd.Mixfile do
   end
 
   defp deps do
-    []
+    [
+     {:ex_doc, "~> 0.15", only: :dev, runtime: false}
+    ]
   end
 
   defp package() do
@@ -24,8 +26,8 @@ defmodule TheEnd.Mixfile do
       description: "Graceful shutdown support for Phoenix or plain Plug application",
       licenses: ["MIT"],
       links: %{
-        "Github" => "https://github.com/lyokato/the_end"
-        # "Docs" => "https://hexdocs.pm/riverside"
+        "Github" => "https://github.com/lyokato/the_end",
+        "Docs"   => "https://hexdocs.pm/the_end"
       },
       maintainers: ["Lyo Kato"]
     ]

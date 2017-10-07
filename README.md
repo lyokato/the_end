@@ -109,7 +109,7 @@ Or else if you don't need to wait for requests to finish.
   Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 ```
 
-you can choose **gatherer** option for your situation
+You can choose **gatherer** option for your situation
 
 - TheEnd.ListenerGatherer.Plug
 - TheEnd.ListenerGatherer.Phoenix
