@@ -1,5 +1,32 @@
 defmodule TheEnd.RequestDrainer do
 
+  @moduledoc """
+  This module's process waits pending requests to finish when terminating itself.
+
+  So, your should put this module's spec after your Endpoint's one and before AcceptTanceStopper's one
+
+      children = [
+        # ... other specs
+        worker(TheEnd.RequestDrainer,
+          [[endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug, timeout: 10_000]])
+        worker(TheEnd.AcceptanceStopper,
+          [[endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug]])
+      ]
+
+  ### Initialization:
+    * `:endpoint` - endpoint module
+    * `:gatherer` - module that implements TheEnd.ListenerGatherer behaviour
+    * `:timeout` - max limit of time you can wait for requests to finish (milliseconds)
+
+  ### See Also
+    * `TheEnd.AcceptanceStopper`
+    * `TheEnd.ListenerGatherer`
+    * `TheEnd.ListenerGatherer.Plug`
+    * `TheEnd.ListenerGatherer.Phoenix`
+    * `TheEnd.ListenerGatherer.LegacyPhoenix`
+
+  """
+
   @default_timeout 5_000
 
   require Logger

@@ -1,5 +1,28 @@
 defmodule TheEnd.AcceptanceStopper do
 
+  @moduledoc """
+  This module's process stops ranch's acceptor processes
+  when terminating itself.
+
+  So, you should put this module's spec at last of your application's supervisor tree.
+
+      children = [
+        # ... other specs
+        worker(TheEnd.AcceptanceStopper,
+          [[endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug]])
+      ]
+
+  ### Initialization:
+    * `:endpoint` - endpoint module
+    * `:gatherer` - module that implements TheEnd.ListenerGatherer behaviour
+
+  ### See Also
+    * `TheEnd.ListenerGatherer`
+    * `TheEnd.ListenerGatherer.Plug`
+    * `TheEnd.ListenerGatherer.Phoenix`
+    * `TheEnd.ListenerGatherer.LegacyPhoenix`
+  """
+
   import Supervisor, only: [terminate_child: 2]
 
   defstruct endpoint: nil,

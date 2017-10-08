@@ -1,5 +1,10 @@
 defmodule TheEnd.Specs do
 
+  @moduledoc """
+  Provides a common spec list for supervisor manages both
+  `TheEnd.AcceptanceStopper` and `TheEnd.RequestDrainer`
+  """
+
   import Supervisor.Spec
 
   @default_timeout 5_000
