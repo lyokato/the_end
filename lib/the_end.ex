@@ -16,7 +16,7 @@ defmodule TheEnd do
   - Phoenix 1.3
   - 1.2 or more older version of Phoenix
 
-  And you also can use only AcceptanceStopper, without waiting pending requests to finish.
+  And you also can use only `TheEnd.AcceptanceStopper`, without waiting pending requests to finish.
   This is for WebSocket application.
 
   ## Usage
@@ -38,7 +38,7 @@ defmodule TheEnd do
       ]
       Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
-  If your Phoenix version is 1.2 or older, use TheEnd.Supervisor.LegacyPhoenix instead of TheEnd.Supervisor.Phoenix.
+  If your Phoenix version is 1.2 or older, use `TheEnd.Supervisor.LegacyPhoenix` instead of `TheEnd.Supervisor.Phoenix`.
 
   ### Plug
 
@@ -95,9 +95,9 @@ defmodule TheEnd do
 
   You can choose **gatherer** option for your situation
 
-    - TheEnd.ListenerGatherer.Plug
-    - TheEnd.ListenerGatherer.Phoenix
-    - TheEnd.ListenerGatherer.LegacyPhoenix
+    - `TheEnd.ListenerGatherer.Plug`
+    - `TheEnd.ListenerGatherer.Phoenix`
+    - `TheEnd.ListenerGatherer.LegacyPhoenix`
 
   """
 end
