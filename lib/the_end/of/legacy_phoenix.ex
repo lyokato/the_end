@@ -1,4 +1,4 @@
-defmodule TheEnd.Supervisor.Phoenix do
+defmodule TheEnd.Of.LegacyPhoenix do
 
   use Supervisor
 
@@ -7,7 +7,7 @@ defmodule TheEnd.Supervisor.Phoenix do
   end
 
   def init(opts) do
-    TheEnd.Specs.children(TheEnd.ListenerGatherer.Phoenix, opts)
+    TheEnd.Specs.children(TheEnd.ListenerGatherer.LegacyPhoenix, opts)
     |> supervise(strategy: :one_for_one)
   end
 

@@ -1,4 +1,4 @@
-defmodule TheEnd.Supervisor.Plug do
+defmodule TheEnd.Of.Plug do
 
   use Supervisor
 
