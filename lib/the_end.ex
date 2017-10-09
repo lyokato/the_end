@@ -31,14 +31,14 @@ defmodule TheEnd do
 
         # you should set this supervisor at last
         supervisor(
-          TheEnd.Supervisor.Phoenix,
+          TheEnd.Of.Phoenix,
           [[timeout: 10_000, endpoint: MyApp.Endpoint]],
           [shutdown: 15_000]
         )
       ]
       Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
-  If your Phoenix version is 1.2 or older, use `TheEnd.Supervisor.LegacyPhoenix` instead of `TheEnd.Supervisor.Phoenix`.
+  If your Phoenix version is 1.2 or older, use `TheEnd.Of.LegacyPhoenix` instead of `TheEnd.Of.Phoenix`.
 
   ### Plug
 
@@ -70,7 +70,7 @@ defmodule TheEnd do
 
         # you should set this supervisor at last
         supervisor(
-          TheEnd.Supervisor.Plug,
+          TheEnd.Of.Plug,
           [[timeout: 10_000, endpoint: MyApp.Endpoint]],
           [shutdown: 15_000]
         )

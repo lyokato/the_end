@@ -3,7 +3,7 @@ defmodule TheEnd.Mixfile do
 
   def project do
     [app: :the_end,
-     version: "0.1.3",
+     version: "1.0.0",
      elixir: "~> 1.4",
      package: package(),
      build_embedded: Mix.env == :prod,
