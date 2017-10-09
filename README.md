@@ -18,15 +18,24 @@ Now, with this library, you can support graceful shutdown for your application b
 And you also can use only AcceptanceStopper, without waiting pending requests to finish.
 This is for WebSocket application.
 
-## Usage
+## Installation
 
-in your config.exs, add dependency.
+If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+by adding `the_end` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:the_end, github: "lyokato/the_end", tag: "0.1.1"}]
+  [
+    {:the_end, "~> 0.1.3"}
+  ]
 end
 ```
+
+Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
+and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
+be found at [https://hexdocs.pm/the_end](https://hexdocs.pm/the_end).
+
+## Usage
 
 ### Phoenix Endpoint
 
