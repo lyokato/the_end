@@ -7,10 +7,10 @@ defmodule TheEnd.RequestDrainer do
 
       children = [
         # ... other specs
-        worker(TheEnd.RequestDrainer,
-          [[endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug, timeout: 10_000]])
-        worker(TheEnd.AcceptanceStopper,
-          [[endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug]])
+        {TheEnd.RequestDrainer,
+          [endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug, timeout: 10_000]},
+        {TheEnd.AcceptanceStopper,
+          [endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug]}
       ]
 
   ### Initialization:
@@ -30,11 +30,26 @@ defmodule TheEnd.RequestDrainer do
   @default_timeout 5_000
 
   require Logger
+
+  use GenServer
+
   import Supervisor, only: [which_children: 1]
 
   defstruct endpoint: nil,
             gatherer: nil,
             timeout:    0
+
+  def child_spec(opts) do
+
+    timeout = Keyword.fetch!(opts, :timeout)
+
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [opts]},
+      shutdown: timeout + 10,
+      type: :worker
+    }
+  end
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
