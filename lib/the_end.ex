@@ -25,16 +25,12 @@ defmodule TheEnd do
 
       children = [
 
-        supervisor(MyApp.Endpoint, []),
+        {MyApp.Endpoint, []},
 
         # ... other supervisors/workers
 
         # you should set this supervisor at last
-        supervisor(
-          TheEnd.Of.Phoenix,
-          [[timeout: 10_000, endpoint: MyApp.Endpoint]],
-          [shutdown: 15_000]
-        )
+        {TheEnd.Of.Phoenix, [timeout: 10_000, endpoint: MyApp.Endpoint]}
       ]
       Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
@@ -64,33 +60,29 @@ defmodule TheEnd do
 
       children = [
 
-        supervisor(MyApp.HTTPSupervisor, []),
+        MyApp.HTTPSupervisor,
 
         # ... other supervisors/workers
 
         # you should set this supervisor at last
-        supervisor(
-          TheEnd.Of.Plug,
-          [[timeout: 10_000, endpoint: MyApp.Endpoint]],
-          [shutdown: 15_000]
-        )
+        {TheEnd.Of.Plug, [timeout: 10_000, endpoint: MyApp.HTTPSupervisor]}
       ]
+
       Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
   Or else if you don't need to wait for requests to finish.
 
       children = [
 
-        supervisor(MyApp.HTTPSupervisor, []),
+        {MyApp.HTTPSupervisor[]},
 
         # ... other supervisors/workers
 
         # you should set this worker at last
-        worker(
-          TheEnd.AcceptanceStopper,
-          [[gatherer: TheEnd.ListenerGatherer.Plug, endpoint: MyApp.HTTPSupervisor]]
-        )
+        {TheEnd.AcceptanceStopper,
+         [gatherer: TheEnd.ListenerGatherer.Plug, endpoint: MyApp.HTTPSupervisor]}
       ]
+
       Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 
   You can choose **gatherer** option for your situation

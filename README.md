@@ -26,7 +26,7 @@ by adding `the_end` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:the_end, "~> 1.0.0"}
+    {:the_end, "~> 1.1.0"}
   ]
 end
 ```
@@ -42,16 +42,12 @@ be found at [https://hexdocs.pm/the_end](https://hexdocs.pm/the_end).
 ```elixir
   children = [
 
-    supervisor(MyApp.Endpoint, []),
+    {MyApp.Endpoint, []},
 
     # ... other supervisors/workers
 
     # you should set this supervisor at last
-    supervisor(
-      TheEnd.Of.Phoenix,
-      [[timeout: 10_000, endpoint: MyApp.Endpoint]],
-      [shutdown: 15_000]
-    )
+    {TheEnd.Of.Phoenix, [timeout: 10_000, endpoint: MyApp.Endpoint]}
   ]
   Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
 ```
@@ -74,7 +70,7 @@ defmodule MyApp.HTTPSupervisor do
   def init(_args) do
       [Plug.Adapters.Cowboy.child_spec(:http,
         MyApp.Router, [], [port: 3000])]
-    |> supervise(strategy: :one_for_one)
+    |> Supervisor.init(strategy: :one_for_one)
   end
 
 end
@@ -83,16 +79,12 @@ end
 ```elixir
   children = [
 
-    supervisor(MyApp.HTTPSupervisor)
+    MyApp.HTTPSupervisor,
 
     # ... other supervisors/workers
 
     # you should set this supervisor at last
-    supervisor(
-      TheEnd.Of.Plug,
-      [[timeout: 10_000, endpoint: MyApp.HTTPSupervisor]],
-      [shutdown: 15_000]
-    )
+    {TheEnd.Of.Plug, [timeout: 10_000, endpoint: MyApp.HTTPSupervisor]}
   ]
 
   Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
@@ -104,15 +96,13 @@ Or else if you don't need to wait for requests to finish.
 ```elixir
   children = [
 
-    supervisor(MyApp.HTTPSupervisor)
+    {MyApp.HTTPSupervisor[]},
 
     # ... other supervisors/workers
 
     # you should set this worker at last
-    worker(
-      TheEnd.AcceptanceStopper,
-      [[gatherer: TheEnd.ListenerGatherer.Plug, endpoint: MyApp.HTTPSupervisor]]
-    )
+    {TheEnd.AcceptanceStopper,
+     [gatherer: TheEnd.ListenerGatherer.Plug, endpoint: MyApp.HTTPSupervisor]}
   ]
 
   Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
