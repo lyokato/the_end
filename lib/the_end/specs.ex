@@ -5,9 +5,19 @@ defmodule TheEnd.Specs do
   `TheEnd.AcceptanceStopper` and `TheEnd.RequestDrainer`
   """
 
-  import Supervisor.Spec
-
   @default_timeout 5_000
+
+  def child_spec(module, opts) do
+
+    timeout  = Keyword.get(opts, :timeout, @default_timeout)
+
+    %{
+      id: module,
+      start: {module, :start_link, [opts]},
+      shutdown: timeout + 15,
+      type: :supervisor
+    }
+  end
 
   def children(gatherer, opts) do
 
@@ -16,16 +26,11 @@ defmodule TheEnd.Specs do
 
     [
 
-      worker(
-        TheEnd.RequestDrainer,
-        [[endpoint: endpoint, gatherer: gatherer, timeout: timeout]],
-        [shutdown: timeout + 10]
-      ),
+      {TheEnd.RequestDrainer,
+       [endpoint: endpoint, gatherer: gatherer, timeout: timeout]},
 
-      worker(
-        TheEnd.AcceptanceStopper,
-        [[endpoint: endpoint, gatherer: gatherer]]
-      )
+      {TheEnd.AcceptanceStopper,
+       [endpoint: endpoint, gatherer: gatherer]}
 
     ]
   end

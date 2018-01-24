@@ -8,8 +8,8 @@ defmodule TheEnd.AcceptanceStopper do
 
       children = [
         # ... other specs
-        worker(TheEnd.AcceptanceStopper,
-          [[endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug]])
+        {TheEnd.AcceptanceStopper,
+          [endpoint: MyApp.Endpoint, gatherer: TheEnd.ListenerGatherer.Plug]}
       ]
 
   ### Initialization:
@@ -22,6 +22,8 @@ defmodule TheEnd.AcceptanceStopper do
     * `TheEnd.ListenerGatherer.Phoenix`
     * `TheEnd.ListenerGatherer.LegacyPhoenix`
   """
+
+  use GenServer
 
   import Supervisor, only: [terminate_child: 2]
 
