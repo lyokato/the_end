@@ -38,7 +38,7 @@ defmodule TheEnd do
 
   ### Plug
 
-  Your need a Plug wrapper supervisor
+  You need a Plug wrapper supervisor
 
       defmodule MyApp.HTTPSupervisor do
 
