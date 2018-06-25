@@ -26,7 +26,7 @@ by adding `the_end` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:the_end, "~> 1.1.0"}
+    {:the_end, "~> 1.1.1"}
   ]
 end
 ```
@@ -56,7 +56,7 @@ If your Phoenix version is 1.2 or older, use TheEnd.Of.LegacyPhoenix instead of 
 
 ### Plug
 
-Your need a Plug wrapper supervisor
+You need a Plug wrapper supervisor
 
 ```elixir
 defmodule MyApp.HTTPSupervisor do
